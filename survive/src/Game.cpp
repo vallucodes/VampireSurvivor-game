@@ -1,16 +1,11 @@
 #include "Game.h"
 
+#include <SFML/Window/Event.hpp>
 #include <SFML/Graphics.hpp>
 #include <SFML/System.hpp>
 #include <iostream>
 
-#include "ResourceManager.h"
-#include "InputHandler.h"
-#include "Weapon.h"
-#include "Player.h"
-#include "Rectangle.h"
-#include "Vampire.h"
-#include "Item.h"
+
 
 Game::Game() :
     m_state(State::WAITING),
@@ -88,8 +83,8 @@ void Game::update(float deltaTime)
             m_pGameInput->update(deltaTime);
             m_pPlayer->update(deltaTime);
 
-            vampireSpawner(deltaTime);
-			itemSpawner(deltaTime);
+            // vampireSpawner(deltaTime);
+			// itemSpawner(deltaTime);
             for (auto& temp : m_pVampires)
             {
                 temp->update(deltaTime);
@@ -182,6 +177,18 @@ void Game::onKeyReleased(sf::Keyboard::Key key)
     m_pGameInput->onKeyReleased(key);
 }
 
+void Game::onMousePressed(const sf::Event::MouseButtonEvent& but_event) {
+	m_pGameInput->onMousePressed(but_event);
+}
+
+void Game::onMouseReleased(const sf::Event::MouseButtonEvent& but_event) {
+	m_pGameInput->onMouseReleased(but_event);
+}
+
+void Game::setMousePosition(sf::Vector2f worldPos) {
+	m_pGameInput->setMousePosition(worldPos);
+}
+
 Player* Game::getPlayer() const
 {
     return m_pPlayer.get();
@@ -220,7 +227,7 @@ void Game::vampireSpawner(float deltaTime)
     m_vampireCooldown = m_nextVampireCooldown;
 }
 
-void Game::itemSpawner(float deltaTime)
+void Game::itemSpawner(InputData inputData, float deltaTime)
 {
     if (m_itemCooldown > 0.0f)
     {
@@ -228,10 +235,14 @@ void Game::itemSpawner(float deltaTime)
         return;
     }
 
-    float randomXPos = rand() % ScreenWidth;
-    float randomYPos = rand() % ScreenHeight;
+    // float randomXPos = rand() % ScreenWidth;
+    // float randomYPos = rand() % ScreenHeight;
+
+    float randomXPos = inputData.m_x - ItemWidth / 2 + 3;
+    float randomYPos = inputData.m_y - ItemHeight / 2 + 3;
 
     sf::Vector2f spawnPosition = sf::Vector2f(randomXPos, randomYPos);
+	std::cout << "puttign item at: " << " x: " << randomXPos << " y: " << randomYPos << std::endl;
     m_pItems.push_back(std::make_unique<Item>(this, spawnPosition));
 
     m_itemCooldown = m_nextItemCooldown;

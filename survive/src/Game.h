@@ -1,10 +1,18 @@
 #pragma once
 
+#include <SFML/Window/Event.hpp>
 #include <SFML/Graphics/Drawable.hpp>
 #include <SFML/Graphics/Font.hpp>
 #include <SFML/Window/Keyboard.hpp>
 #include <memory>
 #include "Constants.h"
+#include "ResourceManager.h"
+#include "InputHandler.h"
+#include "Weapon.h"
+#include "Player.h"
+#include "Rectangle.h"
+#include "Vampire.h"
+#include "Item.h"
 
 class Player;
 class Game;
@@ -36,6 +44,9 @@ class Game : public sf::Drawable
 
 		void onKeyPressed(sf::Keyboard::Key key);
 		void onKeyReleased(sf::Keyboard::Key key);
+		void onMousePressed(const sf::Event::MouseButtonEvent& but_event);
+		void onMouseReleased(const sf::Event::MouseButtonEvent& but_event);
+		void setMousePosition(sf::Vector2f worldPos);
 
 		Player* getPlayer() const;
 		sf::Texture* getPlayerTexture() { return &m_playerTexture; }
@@ -43,7 +54,7 @@ class Game : public sf::Drawable
 		sf::Texture* getItemTexture() { return &m_itemTexture; }
 
 		void vampireSpawner(float deltaTime);
-		void itemSpawner(float deltaTime);
+		void itemSpawner(InputData inputData, float deltaTime);
 
 	private:
 		std::unique_ptr<Player> m_pPlayer;

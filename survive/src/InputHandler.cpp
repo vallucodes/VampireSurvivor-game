@@ -1,12 +1,12 @@
 #include "InputHandler.h"
 #include "Weapon.h"
 #include "Player.h"
+#include "Game.h"
+#include <iostream>
 
 GameInput::GameInput(Game* pGame, Player* pPlayer) :
     m_pGame(pGame), m_pPlayer(pPlayer)
 {
-
-
 }
 
 GameInput::~GameInput()
@@ -19,6 +19,11 @@ void GameInput::update(float deltaTime)
     if (m_inputData.hasInputs())
     {
         m_pPlayer->move(m_inputData, deltaTime);
+    }
+
+	if (m_inputData.hasMouseInputs())
+    {
+        m_pGame->itemSpawner(m_inputData, deltaTime);
     }
 
     if (m_inputData.m_space)
@@ -73,4 +78,32 @@ void GameInput::onKeyReleased(sf::Keyboard::Key key)
     {
         m_inputData.m_space = false;
     }
+}
+
+void GameInput::onMousePressed(const sf::Event::MouseButtonEvent& but_event)
+{
+	std::cout << "button pressed: " << but_event.button << " x: " << but_event.x << " y: " << but_event.y << std::endl;
+	if (but_event.button == sf::Mouse::Left)
+	{
+		m_inputData.m_x = but_event.x;
+		m_inputData.m_y = but_event.y;
+		m_inputData.m_leftClick = true;
+	}
+}
+
+void GameInput::onMouseReleased(const sf::Event::MouseButtonEvent& but_event)
+{
+	// std::cout << "button released: " << but_event.button << " x: " << but_event.x << " y: " << but_event.y << std::endl;
+	if (but_event.button == sf::Mouse::Left)
+	{
+		m_inputData.m_x = 0;
+		m_inputData.m_y = 0;
+		m_inputData.m_leftClick = false;
+	}
+}
+
+void GameInput::setMousePosition(sf::Vector2f worldPos) {
+	// std::cout << "current pos: x: " << worldPos.x << " y: " << worldPos.y << std::endl;
+	m_inputData.m_xMousePos = worldPos.x;
+	m_inputData.m_yMousePos = worldPos.y;
 }

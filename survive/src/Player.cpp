@@ -11,8 +11,8 @@ Player::Player(Game* pGame) :
     m_pGame(pGame),
     m_pWeapon(std::make_unique<Weapon>())
 {
-    // setOrigin(sf::Vector2f(0.0f + (PlayerWidth / 2), 0.0f - (PlayerHeight / 2)));
-    setOrigin(sf::Vector2f(0.0f - 200, 0.0f - 200));
+    setOrigin(sf::Vector2f(0.0f, 0.0f));
+    // setOrigin(sf::Vector2f(0.0f - 200, 0.0f - 200));
 }
 
 bool Player::initialise()
@@ -20,7 +20,7 @@ bool Player::initialise()
     m_sprite.setTexture(*m_pGame->getPlayerTexture());
     m_sprite.setScale(3.5f, 3.5f);
     setIsDead(false);
-    setPosition(ScreenWidth / 2, ScreenHeight / 2);
+    setPosition(ScreenWidth / 2 - (PlayerWidth / 2), ScreenHeight / 2 - (PlayerHeight / 2));
     m_sprite.setPosition(getPosition());
     return true;
 }
@@ -39,11 +39,10 @@ void Player::move(InputData inputData, float deltaTime)
     ySpeed *= deltaTime;
 
     sf::Transformable::move(sf::Vector2f(xSpeed, ySpeed));
-    setPosition(std::clamp(getPosition().x, 0.0f, (float)ScreenWidth - PlayerWidth), std::clamp(getPosition().y, 0.0f, (float)ScreenHeight - PlayerHeight - 190));
-	// setPosition(std::clamp(getPosition().x, 0.0f, (float)ScreenWidth - PlayerWidth), getPosition().y);
+    setPosition(std::clamp(getPosition().x, 0.0f, (float)ScreenWidth - PlayerWidth), std::clamp(getPosition().y, 0.0f, (float)ScreenHeight - PlayerHeight));
 
-	// std::cout << "x: " << std::clamp(getPosition().x, 0.0f, (float)ScreenWidth - PlayerWidth)
-		// << "y: " << std::clamp(getPosition().y, 0.0f, (float)ScreenHeight - PlayerHeight - 190) << std::endl;
+	std::cout << "x: " << std::clamp(getPosition().x, 0.0f, (float)ScreenWidth - PlayerWidth)
+		<< "y: " << std::clamp(getPosition().y, 0.0f, (float)ScreenHeight - PlayerHeight - 190) << std::endl;
     if (inputData.m_movingLeft && !inputData.m_movingRight)
         m_direction = LEFT;
     else if (!inputData.m_movingLeft && inputData.m_movingRight)
