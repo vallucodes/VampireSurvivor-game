@@ -19,24 +19,33 @@ enum eDirection
 
 class Player : public Rectangle
 {
-public:
-    Player(Game* pGame);
-    virtual ~Player() {}
-    
-    bool initialise();
-    void move(InputData inputData, float deltaTime);
-    void attack();
-    void update(float deltaTime);
-    virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+	public:
+		Player(Game* pGame);
+		virtual ~Player() {}
 
-    bool isDead() const { return m_isDead; }
-    void setIsDead(bool isDead) { m_isDead = isDead; }
+		bool initialise();
+		void move(InputData inputData, float deltaTime);
+		void attack(float deltaTime);
+		void update(InputData& inputData, float deltaTime);
+		virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
-    Weapon* getWeapon() { return m_pWeapon.get(); }
+		bool isDead() const {
+			return m_isDead;
+		}
 
-private:
-    bool    m_isDead = false;
-    eDirection m_direction = LEFT;
-    Game*   m_pGame;
-    std::unique_ptr<Weapon> m_pWeapon;
+		void setIsDead(bool isDead) {
+			m_isDead = isDead;
+		}
+
+		Weapon* getWeapon() {
+			return m_pWeapon.get();
+		}
+
+	private:
+		// float m_angle = 0.0f;
+		float m_wepCooldown = 0.0f;
+		bool    m_isDead = false;
+		eDirection m_direction = LEFT;
+		Game*   m_pGame;
+		std::unique_ptr<Weapon> m_pWeapon;
 };

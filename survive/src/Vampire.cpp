@@ -5,6 +5,8 @@
 #include "Player.h"
 #include "MathUtils.h"
 
+#include <iostream>
+
 Vampire::Vampire(Game* game, sf::Vector2f position) :
     Rectangle(sf::Vector2f(VampireWidth, VampireHeight)),
     m_pGame(game)
@@ -21,10 +23,10 @@ void Vampire::update(float deltaTime)
 {
     if (m_isKilled)
         return;
-    
+
     Player* pPlayer = m_pGame->getPlayer();
 
-    if (collidesWith(pPlayer->getWeapon()))
+    if (collidesWithWeapon(pPlayer->getWeapon()))
     {
         setIsKilled(true);
         return;

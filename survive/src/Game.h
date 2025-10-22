@@ -1,61 +1,85 @@
 #pragma once
 
+#include <SFML/Window/Event.hpp>
 #include <SFML/Graphics/Drawable.hpp>
 #include <SFML/Graphics/Font.hpp>
 #include <SFML/Window/Keyboard.hpp>
 #include <memory>
 #include "Constants.h"
+#include "ResourceManager.h"
+#include "InputHandler.h"
+#include "Weapon.h"
+#include "Player.h"
+#include "Rectangle.h"
+#include "Vampire.h"
+#include "Item.h"
+#include "Projectile.h"
 
 class Player;
 class Game;
 class GameInput;
 class Vampire;
+class Item;
+class Projectile;
 
 namespace sf { class Clock; }
 
 class Game : public sf::Drawable
 {
-public:
-    
-    enum class State
-    {
-        WAITING,
-        ACTIVE,
-    };
-    
-    Game();
-    ~Game();
-    
-    bool initialise();
-    void update(float deltaTime);
-    void resetLevel();
-    void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
-    
-    State getState() const { return m_state; }
-    
-    void onKeyPressed(sf::Keyboard::Key key);
-    void onKeyReleased(sf::Keyboard::Key key);
+	public:
 
-    Player* getPlayer() const;
-    sf::Texture* getPlayerTexture() { return &m_playerTexture; }
-    sf::Texture* getVampireTexture() { return &m_vampTexture; }
+		enum class State
+		{
+			WAITING,
+			ACTIVE,
+		};
 
-    void vampireSpawner(float deltaTime);
+		Game();
+		~Game();
 
-private:
-    std::unique_ptr<Player> m_pPlayer;
+		bool initialise();
+		void update(float deltaTime);
+		void resetLevel();
+		void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
 
-    std::vector<std::unique_ptr<Vampire>> m_pVampires;
+		State getState() const { return m_state; }
 
-    State m_state;
-    std::unique_ptr<sf::Clock> m_pClock;
-    std::unique_ptr<GameInput> m_pGameInput;
+		void onKeyPressed(sf::Keyboard::Key key);
+		void onKeyReleased(sf::Keyboard::Key key);
+		void onMousePressed(const sf::Event::MouseButtonEvent& but_event);
+		void setMousePosition(sf::Vector2f worldPos);
 
-    float m_vampireCooldown = 0.0f;
-    float m_nextVampireCooldown = 2.0f;
-    int m_spawnCount = 0;
-    
-    sf::Font m_font;
-    sf::Texture m_vampTexture;
-    sf::Texture m_playerTexture;
+		Player* getPlayer() const;
+		const std::vector<std::unique_ptr<Vampire>>& getVampires() const;
+		sf::Texture* getPlayerTexture() { return &m_playerTexture; }
+		sf::Texture* getVampireTexture() { return &m_vampTexture; }
+		sf::Texture* getItemTexture() { return &m_itemTexture; }
+
+		void vampireSpawner(float deltaTime);
+		void itemSpawner(float deltaTime);
+		void projectileCreator(GameInput& m_pGameInput);
+
+	private:
+		std::unique_ptr<Player> m_pPlayer;
+
+		std::vector<std::unique_ptr<Vampire>> m_pVampires;
+		std::vector<std::unique_ptr<Item>> m_pItems;
+		std::vector<std::unique_ptr<Projectile>> m_pProjectiles;
+
+		State m_state;
+		std::unique_ptr<sf::Clock> m_pClock;
+		std::unique_ptr<GameInput> m_pGameInput;
+
+		float m_vampireCooldown = 0.0f;
+		float m_itemCooldown = 0.0f;
+		float m_projectileCooldown = 0.0f;
+		float m_nextItemCooldown = 5.0f;
+		float m_nextVampireCooldown = 2.0f;
+		float m_nextProjectileCooldown = 0.5f;
+		int m_spawnCount = 0;
+
+		sf::Font m_font;
+		sf::Texture m_vampTexture;
+		sf::Texture m_playerTexture;
+		sf::Texture m_itemTexture;
 };

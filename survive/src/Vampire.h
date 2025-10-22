@@ -9,7 +9,7 @@ class Vampire : public Rectangle
 public:
     Vampire(Game* game, sf::Vector2f position);
     virtual ~Vampire() {}
-    
+
     void update(float deltaTime);
 
     void setIsKilled(bool isKilled) { m_isKilled = isKilled; }
@@ -18,4 +18,5 @@ public:
 private:
     Game* m_pGame;
     bool m_isKilled = false;
+	int v_counter;
 };

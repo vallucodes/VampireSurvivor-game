@@ -3,6 +3,8 @@
 #include "InputHandler.h"
 #include "Constants.h"
 #include <vector>
+#include <iostream>
+#include <cmath>
 #include "Game.h"
 
 Player::Player(Game* pGame) :
@@ -11,6 +13,7 @@ Player::Player(Game* pGame) :
     m_pWeapon(std::make_unique<Weapon>())
 {
     setOrigin(sf::Vector2f(0.0f, 0.0f));
+    // setOrigin(sf::Vector2f(0.0f - 200, 0.0f - 200));
 }
 
 bool Player::initialise()
@@ -18,7 +21,7 @@ bool Player::initialise()
     m_sprite.setTexture(*m_pGame->getPlayerTexture());
     m_sprite.setScale(3.5f, 3.5f);
     setIsDead(false);
-    setPosition(ScreenWidth / 2, ScreenHeight / 2);
+    setPosition(ScreenWidth / 2 - (PlayerWidth / 2), ScreenHeight / 2 - (PlayerHeight / 2));
     m_sprite.setPosition(getPosition());
     return true;
 }
@@ -27,7 +30,7 @@ void Player::move(InputData inputData, float deltaTime)
 {
     float xSpeed = 0.0f;
     float ySpeed = 0.0f;
-    
+
     xSpeed -= inputData.m_movingLeft * PlayerSpeed;
     xSpeed += inputData.m_movingRight * PlayerSpeed;
     xSpeed *= deltaTime;
@@ -35,10 +38,12 @@ void Player::move(InputData inputData, float deltaTime)
     ySpeed -= inputData.m_movingUp * PlayerSpeed;
     ySpeed += inputData.m_movingDown * PlayerSpeed;
     ySpeed *= deltaTime;
-    
-    sf::Transformable::move(sf::Vector2f(xSpeed, ySpeed));
-    setPosition(std::clamp(getPosition().x, 0.0f, (float)ScreenWidth), getPosition().y);
 
+    sf::Transformable::move(sf::Vector2f(xSpeed, ySpeed));
+    setPosition(std::clamp(getPosition().x, 0.0f, (float)ScreenWidth - PlayerWidth), std::clamp(getPosition().y, 0.0f, (float)ScreenHeight - PlayerHeight));
+
+	// std::cout << "x: " << std::clamp(getPosition().x, 0.0f, (float)ScreenWidth - PlayerWidth)
+	// 	<< "y: " << std::clamp(getPosition().y, 0.0f, (float)ScreenHeight - PlayerHeight) << std::endl;
     if (inputData.m_movingLeft && !inputData.m_movingRight)
         m_direction = LEFT;
     else if (!inputData.m_movingLeft && inputData.m_movingRight)
@@ -49,24 +54,34 @@ void Player::move(InputData inputData, float deltaTime)
         m_direction = DOWN;
 }
 
-void Player::attack()
+void Player::attack(float deltaTime)
 {
-    m_pWeapon->setActive(true);
+	if (m_wepCooldown > 1){
+    	m_pWeapon->setActive(true);
+		m_wepCooldown = 0;
+	}
 }
 
-void Player::update(float deltaTime)
+void Player::update(InputData& inputData, float deltaTime)
 {
     sf::Vector2f weaponSize = m_pWeapon->getSize();
-
+	float angleRad = std::atan2((inputData.m_yMousePos - m_sprite.getPosition().y - PlayerHeight / 2), (inputData.m_xMousePos - m_sprite.getPosition().x - PlayerWidth / 2));
+	float angleDeg = angleRad * 180.f / M_PI;
+	if (angleDeg < 0)
+    	angleDeg += 360.0f;
+	// std::cout << angleDeg << std::endl;
+	m_wepCooldown += deltaTime;
     m_sprite.setPosition(getPosition());
-    m_pWeapon->setPosition(sf::Vector2f(
-        getCenter().x - (m_direction == LEFT ? weaponSize.x : 0.0f),
-        getCenter().y - weaponSize.y / 2.0f));
-    m_pWeapon->update(deltaTime);
+	sf::Vector2f weaponPos = getCenter();
+	m_pWeapon->setPosition(weaponPos);
+
+	m_pWeapon->setRotation(angleDeg);
+
+	m_pWeapon->update(deltaTime);
 }
 
 void Player::draw(sf::RenderTarget &target, sf::RenderStates states) const
 {
-    Rectangle::draw(target, states);
-    m_pWeapon->draw(target, states);
+	Rectangle::draw(target, states);
+	m_pWeapon->draw(target, states);
 }
