@@ -112,7 +112,7 @@ void Rectangle::draw(sf::RenderTarget &target, sf::RenderStates states) const
     target.draw(m_sprite);
 }
 
-sf::Vector2f Rectangle::getCenter()
+sf::Vector2f Rectangle::getCenter() const
 {
     return getPosition() + (m_size * 0.5f);
 }

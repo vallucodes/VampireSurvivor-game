@@ -19,9 +19,9 @@ struct InputData
     bool m_space = false;
     bool m_spaceReleased = true;
 	bool m_leftClick = false;
+	bool m_rightClick = false;
 
     bool hasInputs() { return m_movingUp || m_movingDown || m_movingLeft || m_movingRight || m_space;}
-	bool hasMouseInputs() { return m_leftClick;}
 };
 
 class GameInput

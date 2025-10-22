@@ -22,3 +22,6 @@ const float ProjectileHeight = 7.0f;
 const float ProjectileWidth = 7.0f;
 const float ProjectileSpeed = 500.0f;
 const float ProjectileRadius = 5.0f;
+
+const float PowerupRadius = 5.0f;
+const int	MaxPowerUps = 5;

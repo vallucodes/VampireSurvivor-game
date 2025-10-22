@@ -3,15 +3,16 @@
 
 #include <iostream>
 
-Projectile::Projectile(Game* game, sf::Vector2f position) :
+Projectile::Projectile(Game* game, sf::Vector2f position, sf::Color color, sf::Vector2f direction) :
     Rectangle(sf::Vector2f(ProjectileWidth, ProjectileHeight)),
     m_pGame(game)
 {
+	setColor(color);
     setPosition(position);
+	// std::cout << "saving dir: " << " x: " << direction.x << " y: " << direction.y << std::endl;
+	m_direction = direction;
     setOrigin(sf::Vector2f(0.0f + ProjectileRadius, 0.0f + ProjectileRadius));
     setIsKilled(false);
-
-    // m_sprite.setScale(0.2f, 0.2f);
 }
 
 void Projectile::update(InputData inputdata, float deltaTime)
@@ -36,17 +37,7 @@ void Projectile::update(InputData inputdata, float deltaTime)
 		pVampire->setIsKilled(true);
 		setIsKilled(true);
 	}
-	
 
-	if (!m_directionSet)
-	{
-		sf::Vector2f playerCenter = pPlayer->getCenter();
-		// sf::Vector2f direction = -(VecNormalized(playerCenter - getCenter()));
-		sf::Vector2f mousePosition = sf::Vector2f(inputdata.m_xMousePos, inputdata.m_yMousePos);
-		m_direction = VecNormalized(mousePosition - playerCenter);
-		m_directionSet = true;
-	}
-	// if (m_direction.x != 0)
 	// 	std::cout << "m_direction x:" << m_direction.x << " y: " << m_direction.y << std::endl;
 	sf::Vector2f velocity = ProjectileSpeed * deltaTime * m_direction;
 	sf::Transformable::move(velocity);
@@ -56,7 +47,7 @@ void Projectile::update(InputData inputdata, float deltaTime)
 void Projectile::draw(sf::RenderTarget &target, sf::RenderStates states) const
 {
 	sf::CircleShape circle(ProjectileRadius);
-	circle.setFillColor(sf::Color::Red);
+	circle.setFillColor(getColor());
 	circle.setPosition(getPosition());
 	circle.setOrigin(getOrigin());
 	target.draw(circle);

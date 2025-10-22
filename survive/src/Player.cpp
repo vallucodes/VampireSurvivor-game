@@ -13,7 +13,6 @@ Player::Player(Game* pGame) :
     m_pWeapon(std::make_unique<Weapon>())
 {
     setOrigin(sf::Vector2f(0.0f, 0.0f));
-    // setOrigin(sf::Vector2f(0.0f - 200, 0.0f - 200));
 }
 
 bool Player::initialise()
@@ -72,16 +71,51 @@ void Player::update(InputData& inputData, float deltaTime)
 	// std::cout << angleDeg << std::endl;
 	m_wepCooldown += deltaTime;
     m_sprite.setPosition(getPosition());
+
 	sf::Vector2f weaponPos = getCenter();
 	m_pWeapon->setPosition(weaponPos);
-
 	m_pWeapon->setRotation(angleDeg);
-
 	m_pWeapon->update(deltaTime);
 }
 
 void Player::draw(sf::RenderTarget &target, sf::RenderStates states) const
 {
+	draw_powerups(target, states);
 	Rectangle::draw(target, states);
 	m_pWeapon->draw(target, states);
+}
+
+void Player::draw_powerups(sf::RenderTarget &target, sf::RenderStates states) const {
+
+	int distanceFromPlayer = 40;
+	sf::Vector2f playerPos = getCenter();
+
+	// std::cout << "current pups: " << m_powerUps << std::endl;
+	for (int i = 0; i < m_powerUps; i++)
+	{
+		sf::CircleShape circle(PowerupRadius);
+
+		float angle = 360 / MaxPowerUps * i - 90;
+		if (angle != 0){
+			// std::cout << "angle: " << angle << std::endl;
+		}
+
+		float radians = angle * M_PI / 180.0f;
+
+		float offsetX = std::cos(radians) * distanceFromPlayer;
+		float offsetY = std::sin(radians) * distanceFromPlayer;
+
+		// std::cout << "X: " << offsetX << std::endl;
+		// std::cout << "Y: " << offsetY << std::endl;
+
+		circle.setFillColor(sf::Color::Cyan);
+		circle.setOrigin(sf::Vector2f(0.0f + PowerupRadius, 0.0f + PowerupRadius));
+		circle.setPosition(playerPos.x + offsetX, playerPos.y + offsetY);
+		target.draw(circle);
+		Rectangle::draw(target, states);
+	}
+}
+
+int& Player::getPowerUps() {
+	return m_powerUps;
 }

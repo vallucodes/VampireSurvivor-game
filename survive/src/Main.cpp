@@ -10,6 +10,7 @@
 
 int main(int argc, char* argv[])
 {
+
 	// ResourceManager Must be Instantiated here -- DO NOT CHANGE
 	ResourceManager::init(argv[0]);
 
@@ -27,6 +28,7 @@ int main(int argc, char* argv[])
 	// run the program as long as the window is open
 	while (window.isOpen())
 	{
+		std::srand(std::time(0));
 		// sf::Vector2i pos = sf::Mouse::getPosition(window);
 		// check all the window's events that were triggered since the last iteration of the loop
 		sf::Event event;

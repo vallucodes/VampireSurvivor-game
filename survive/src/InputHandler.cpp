@@ -90,6 +90,12 @@ void GameInput::onMousePressed(const sf::Event::MouseButtonEvent& but_event)
 		m_inputData.m_y = but_event.y;
 		m_inputData.m_leftClick = true;
 	}
+	else if (but_event.button == sf::Mouse::Right)
+	{
+		m_inputData.m_x = but_event.x;
+		m_inputData.m_y = but_event.y;
+		m_inputData.m_rightClick = true;
+	}
 }
 
 void GameInput::setMousePosition(sf::Vector2f worldPos) {

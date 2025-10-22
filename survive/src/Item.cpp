@@ -25,6 +25,8 @@ void Item::update(float deltaTime)
 
     if (collidesWith(pPlayer))
     {
+		if (pPlayer->getPowerUps() < MaxPowerUps)
+			pPlayer->getPowerUps()++;
         setIsKilled(true);
         return;
     }

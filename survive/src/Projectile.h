@@ -13,7 +13,7 @@ class Game;
 class Projectile : public Rectangle
 {
 public:
-    Projectile(Game* game, sf::Vector2f position);
+    Projectile(Game* game, sf::Vector2f position, sf::Color color, sf::Vector2f direction);
     virtual ~Projectile() {}
 
     void update(InputData inputdata, float deltaTime);

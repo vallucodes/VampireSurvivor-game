@@ -15,7 +15,7 @@ public:
     bool lineSegmentsIntersect(sf::Vector2f p1, sf::Vector2f p2, sf::Vector2f p3, sf::Vector2f p4);
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
-    sf::Vector2f getCenter();
+    sf::Vector2f getCenter() const;
 
     void setSize(sf::Vector2f size) {
 		m_size = size;
