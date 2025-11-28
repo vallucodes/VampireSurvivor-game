@@ -1,14 +1,29 @@
-# Supercell Coding Test
+# Supercell Coding Competition
 
 This was Supercell coding test. There was given basic game built with SFML library and it had bugs.
 
 Idea of the project was to fix the bugs and add own features to the game to make it more playable and fun.
 
-![Description](gif/gameplay.gif)
+<div style="display: flex; gap: 20px;">
+  <div>
+    <h3>Original game</h3>
+    <img src="gif/original.gif" width="550"/>
+  </div>
+  <div>
+    <h3>My improved game</h3>
+    <img src="gif/gameplay.gif" width="550"/>
+  </div>
+</div>
 
-## Building and running
+## How to play
 
-Simply run
+Download repository
+``` Bash
+git clone https://github.com/vallucodes/VampireSurvivor-game.git
+cd VampireSurvivor-game
+```
+
+Compile the project
 
 ``` Bash
 cmake -B build
@@ -21,8 +36,10 @@ The exact location of the executable may differ depending on your system and com
 
 ## Controls
 
-`WASD` to move \
-`Mouse` to aim and `mouse1` shoot
+- `W,A,S,D` to move
+- `Mouse` to aim
+- `mouse1` to shoot normal projectiles
+- `mouse2` to shoot collected projectiles
 
 ## Prerequisites
 
@@ -45,7 +62,7 @@ sudo apt install \
 
 ## My contribution
 
-Player healthbar \
-All projectiles \
-Weapon to shoot projectiles \
-Collectables that can be shot as shotgun projectiles
+- Player healthbar
+- All projectiles
+- Rotating weapon to shoot projectiles
+- Collectables that can be shot as shotgun projectiles
