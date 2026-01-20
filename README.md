@@ -15,6 +15,13 @@ Idea of the project was to fix the bugs and add own features to the game to make
   </div>
 </div>
 
+## My contribution
+
+- Player healthbar
+- All projectiles
+- Rotating weapon to shoot projectiles
+- Collectables that can be shot as shotgun projectiles
+
 ## How to play
 
 Download repository
@@ -59,10 +66,3 @@ sudo apt install \
     libgl1-mesa-dev \
     libegl1-mesa-dev
 ```
-
-## My contribution
-
-- Player healthbar
-- All projectiles
-- Rotating weapon to shoot projectiles
-- Collectables that can be shot as shotgun projectiles
