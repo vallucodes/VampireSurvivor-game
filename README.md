@@ -17,6 +17,7 @@ Idea of the project was to fix the bugs and add own features to the game to make
 
 ## My contribution
 
+- Collectibles
 - Player healthbar
 - All projectiles
 - Rotating weapon to shoot projectiles
@@ -66,3 +67,4 @@ sudo apt install \
     libgl1-mesa-dev \
     libegl1-mesa-dev
 ```
+
